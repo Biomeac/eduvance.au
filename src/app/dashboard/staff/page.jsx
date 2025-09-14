@@ -59,7 +59,7 @@ export default function UploadResource() {
 
   useEffect(() => {
     if (window.supabase && !supabaseClient) {
-      const client = window.supabase.supabase;
+      const client = window.supabase.createClient(supabaseUrl, supabaseKey);
       setSupabaseClient(client);
     }
   }, []);
@@ -111,6 +111,14 @@ export default function UploadResource() {
           setMessage(`Subjects fetch failed: ${error.message}`);
           setMessageType('error');
         } else {
+          // Sort units for each subject
+          const sortedSubjects = (data || []).map(sub => {
+            let units = sub.units || [];
+            units.sort((a, b) => {
+              const getUnitNum = (u) => {
+                const match = (u.unit || '').match(/Unit\s*(\d+)/i);
+                return match ? parseInt(match[1], 10) : Number.MAX_SAFE_INTEGER;
+              };
               const numA = getUnitNum(a);
               const numB = getUnitNum(b);
               if (numA !== numB) return numA - numB;
@@ -141,7 +149,9 @@ export default function UploadResource() {
         console.error('Error fetching exam sessions:', error.message);
         setMessage(`Failed to load exam sessions: ${error.message}`);
         setMessageType('error');
-      } 
+      } else {
+        setExamSessions(data || []);
+      }
       setLoadingExamSessions(false);
     };
 
@@ -161,7 +171,16 @@ export default function UploadResource() {
     if (error) {
       setMessage(`Login failed: ${error.message}`);
       setMessageType('error');
-    } ) => {
+    } else {
+      setStaffUser(data.user);
+      setMessage('Logged in successfully!');
+      setMessageType('success');
+      supabaseClient
+        .from('staff_users')
+        .select('username')
+        .eq('id', data.user.id)
+        .single()
+        .then(({ data: staffData }) => {
             setStaffUsername(staffData?.username || '');
         });
       fetchPendingResources();
@@ -240,7 +259,14 @@ export default function UploadResource() {
       setMessageType('error');
       setSubmitLoading(false);
       console.warn('No data returned from insert:', data);
-    } , 3000);
+    } else {
+      setMessage("✅ Resource added successfully");
+      setMessageType('success');
+      setTitle(''); setLink(''); setDescription(''); setUnitChapter('');
+      setTimeout(() => {
+        setMessage("");
+        setMessageType(null);
+      }, 3000);
       setSubmitLoading(false);
     }
   };
@@ -299,7 +325,8 @@ export default function UploadResource() {
     if (error) {
       if (error.code === '23505') {
         setMessage(`A paper for this subject, exam session, and unit code already exists.`);
-      } `);
+      } else {
+        setMessage(`Past paper submission failed: ${error.message}`);
       }
       setMessageType('error');
       console.error('Past paper submission error:', error);
@@ -307,7 +334,18 @@ export default function UploadResource() {
       setMessage('Past paper submission did not return a new record.');
       setMessageType('error');
       console.warn('No data returned from paper insert:', data);
-    } , 3000);
+    } else {
+      setMessage("✅ Past paper added successfully");
+      setMessageType('success');
+      setSelectedExamSessionId('');
+      setUnitCode('');
+      setQuestionPaperLink('');
+      setMarkSchemeLink('');
+      setExaminerReportLink('');
+      setTimeout(() => {
+        setMessage("");
+        setMessageType(null);
+      }, 3000);
     }
     setSubmitLoading(false);
 };
@@ -350,7 +388,10 @@ export default function UploadResource() {
       setPendingResources((prev) => prev.filter((res) => res.id !== id));
       setMessage('Resource approved and moved to pending resources!');
       setMessageType('success');
-    } 
+    } else {
+      setMessage('Failed to approve resource: ' + error.message);
+      setMessageType('error');
+    }
   };
 
   // Reject a community resource request
@@ -401,7 +442,9 @@ export default function UploadResource() {
           delete newState[id];
           return newState;
         });
-      } 
+      } else {
+        throw new Error(error.message);
+      }
     } catch (error) {
       console.error(`Reject attempt ${retryCount + 1} failed:`, error);
       
@@ -425,12 +468,17 @@ export default function UploadResource() {
         setTimeout(() => {
           rejectResource(id, retryCount + 1);
         }, 1000);
-      }  attempts. This might be due to a network issue or database problem.\n\nWould you like to reload the page to refresh the data? (Recommended)`
+      } else {
+        // All retries failed - offer manual solutions
+        const shouldReload = window.confirm(
+          `Failed to reject community resource after ${maxRetries + 1} attempts. This might be due to a network issue or database problem.\n\nWould you like to reload the page to refresh the data? (Recommended)`
         );
         
         if (shouldReload) {
           window.location.reload();
-        } . Refreshing resource list...`);
+        } else {
+          // Alternative: Force refresh the resource list
+          setMessage(`Failed to reject resource: ${error.message}. Refreshing resource list...`);
           setMessageType('error');
           
           // Force refresh the pending resources if that function exists
@@ -477,7 +525,11 @@ export default function UploadResource() {
       if (contentDisposition.includes('zip')) {
         // Folder: try to get file list from zip (not possible client-side), so just show generic message
         fileNames = ['All PDFs in folder'];
-      } 
+      } else {
+        // Single file: extract filename
+        const match = contentDisposition.match(/filename="([^"]+)"/);
+        if (match) fileNames = [match[1]];
+      }
       
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
@@ -500,7 +552,9 @@ export default function UploadResource() {
           console.error('Error updating watermark status:', updateError);
           // Don't fail the whole operation, just log the error
           setMessage('Watermarked PDF downloaded! (Note: Status update failed)');
-        } 
+        } else {
+          setMessage('Watermarked PDF downloaded!');
+        }
       } catch (dbError) {
         console.error('Database update error:', dbError);
         setMessage('Watermarked PDF downloaded! (Note: Status update failed)');
@@ -556,7 +610,10 @@ export default function UploadResource() {
       });
       setMessage('Resource details updated!');
       setMessageType('success');
-    } 
+    } else {
+      setMessage('Failed to update resource: ' + error.message);
+      setMessageType('error');
+    }
   };
 
   // Handler to initialize edit mode for a resource
@@ -639,7 +696,9 @@ export default function UploadResource() {
                           <option value="General">General</option>
                         </select>
                       );
-                    }  onChange={(e) => setUnitChapter(e.target.value)} placeholder="Unit/Chapter Name (Optional)" className="w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition" />
+                    } else {
+                      return (
+                        <input type="text" value={unitChapter} onChange={(e) => setUnitChapter(e.target.value)} placeholder="Unit/Chapter Name (Optional)" className="w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition" />
                       );
                     }
                   })()}
@@ -853,7 +912,11 @@ export default function UploadResource() {
                                       <option value="General">General</option>
                                     </select>
                                   );
-                                } 
+                                } else {
+                                  return (
+                                    <input
+                                      type="text"
+                                      value={editedResourceData[res.id]?.unit_chapter_name ?? res.unit_chapter_name}
                                       onChange={e => setEditedResourceData(prev => ({ ...prev, [res.id]: { ...prev[res.id], unit_chapter_name: e.target.value } }))}
                                       className="border px-2 py-1 rounded-md text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition"
                                       placeholder="Unit/Chapter Name (Optional)"
