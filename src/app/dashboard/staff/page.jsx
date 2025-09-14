@@ -110,7 +110,7 @@ export default function UploadResource() {
         if (error) {
           setMessage(`Subjects fetch failed: ${error.message}`);
           setMessageType('error');
-        } ;
+        } else {
               const numA = getUnitNum(a);
               const numB = getUnitNum(b);
               if (numA !== numB) return numA - numB;

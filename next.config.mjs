@@ -57,10 +57,8 @@ const nextConfig = {
     domains: ['eduvance-org.vercel.app'],
   },
   
-  // Experimental features for security
-  experimental: {
-    serverComponentsExternalPackages: ['bcryptjs'],
-  },
+  // External packages for server components (moved from experimental)
+  serverExternalPackages: ['bcryptjs'],
   
   // Webpack configuration for security
   webpack: (config, { isServer }) => {
@@ -77,4 +75,3 @@ const nextConfig = {
 };
         
 export default nextConfig;
-        

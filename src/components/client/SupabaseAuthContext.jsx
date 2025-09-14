@@ -1,5 +1,5 @@
-// components/client/SupabaseAuthContext.jsx
 "use client"
+// components/client/SupabaseAuthContext.jsx
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient"; // This will now be the createBrowserClient

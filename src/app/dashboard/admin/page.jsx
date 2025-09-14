@@ -239,12 +239,11 @@ export default function AdminDashboard() {
         setTimeout(() => {
           rejectResource_Under(id, retryCount + 1);
         }, 1000);
-      }  attempts. This might be due to a network issue or database problem.\n\nWould you like to reload the page to refresh the data? (Recommended)`
-        );
+      } else {
         
         if (shouldReload) {
           window.location.reload();
-        } . Refreshing resource list...`);
+        }
           setMessageType('error');
           
           // Force refresh the pending resources if that function exists
@@ -427,7 +426,7 @@ export default function AdminDashboard() {
     if (!error) {
         setModResults((prev) => prev.filter((r) => r.id !== item.id));
         showPopup({ type: 'rejectSuccess', subText: 'Item deleted.' }); // Using rejectSuccess for a delete type
-    } ` });
+    }
     }
   };
 
@@ -454,7 +453,7 @@ export default function AdminDashboard() {
     setModEditLoading(false);
     if (error) {
       showPopup({ type: 'fetchError', subText: `Failed to update: ${error.message}` });
-    } );
+    }
       setModEditItem(null);
       setModEditForm({});
       // Refresh moderation results
@@ -819,7 +818,7 @@ export default function AdminDashboard() {
     
     if (shouldReload) {
       window.location.reload();
-    } );
+    }
       
       setTimeout(async () => {
         try {
@@ -845,7 +844,7 @@ export default function AdminDashboard() {
       setUnapprovedResources((prev) => prev.filter((res) => res.id !== id));
       fetchLatestResources();
       showPopup({ type: 'rejectSuccess', subText: 'Resource deleted.' }); // Using rejectSuccess for a delete type
-    } ` });
+    }
     }
   };
 
@@ -861,9 +860,9 @@ export default function AdminDashboard() {
       .select("id")
       if (!staffData.some(staff => staff.id === data.user.id)) {
         showPopup({ type: 'fetchError', subText: `Login failed: Access Denied.` });
-      } );
       }
-    } ` });
+      }
+    }
     }
     setLoginLoading(false);
   };
@@ -874,7 +873,7 @@ export default function AdminDashboard() {
     if (!error) {
       setStaffUser(null);
       showPopup({ type: 'logoutSuccess' });
-    } ` });
+    }
     }
   };
 
@@ -918,7 +917,7 @@ export default function AdminDashboard() {
     } else if (!data || data.length === 0) {
       showPopup({ type: 'fetchError', subText: 'Submission did not return a new resource. Please check your database constraints.' });
       setSubmitLoading(false);
-    } );
+    }
       setTitle('');
       setLink('');
       setDescription('');
@@ -986,7 +985,7 @@ export default function AdminDashboard() {
     } else if (!data || data.length === 0) {
       showPopup({ type: 'fetchError', subText: 'Past Paper submission did not return a new record. Please check your database constraints.' });
       setPastPaperSubmitLoading(false);
-    } );
+    }
       // Clear form fields
       setSelectedExamSessionId('');
       setUnitCode('');
@@ -1012,7 +1011,7 @@ export default function AdminDashboard() {
     });
     if (error) {
       showPopup({ type: 'fetchError', subText: `Failed to add subject: ${error.message}` });
-    } ); // Using approveSuccess for adding a subject
+    } // Using approveSuccess for adding a subject
       setNewSubjectName('');
       setNewSubjectCode('');
       setNewSubjectType('');
@@ -1087,7 +1086,7 @@ export default function AdminDashboard() {
     setEditLoading(false);
     if (error) {
       showPopup({ type: 'fetchError', subText: `Failed to update resource: ${error.message}` });
-    } );
+    }
       closeEditResource();
       fetchUnapprovedResources();
       fetchLatestResources();
@@ -1100,7 +1099,7 @@ export default function AdminDashboard() {
     if (!error) {
       showPopup({ type: 'rejectSuccess', subText: 'Resource deleted.' }); // Using rejectSuccess for a delete type
       fetchLatestResources();
-    } ` });
+    }
     }
   };
 
@@ -1249,7 +1248,7 @@ export default function AdminDashboard() {
         showPopup({ type: 'approveSuccess', subText: result.message || 'User added successfully!' });
         setNewUserData({ username: '', email: '', password: '', role: 'moderator' }); // Reset form
         fetchStaffUsers(); // Refresh the user list in the UI
-      } );
+      }
       }
     } catch (error) {
       // Handle network errors or other unexpected issues
@@ -1281,7 +1280,7 @@ export default function AdminDashboard() {
 
     if (error) {
       showPopup({ type: 'fetchError', subText: `Failed to update user role: ${error.message}` });
-    } );
+    }
       setSelectedUserIdForUpdate('');
       setSelectedUserNewRole('moderator');
       fetchStaffUsers(); // Refresh the user list
@@ -1313,7 +1312,7 @@ export default function AdminDashboard() {
 
     if (error) {
       showPopup({ type: 'fetchError', subText: `Failed to remove user: ${error.message}` });
-    } );
+    }
       setSelectedUserIdForRemove('');
       fetchStaffUsers(); // Refresh the user list
     }

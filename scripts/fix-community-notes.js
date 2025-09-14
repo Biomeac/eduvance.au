@@ -1,4 +1,11 @@
-"use client";
+#!/usr/bin/env node
+// Fix all community notes files that got corrupted by the security fix scripts
+
+const fs = require('fs');
+const path = require('path');
+
+// Template for community notes files
+const communityNotesTemplate = `"use client";
 
 import { supabase } from '@/lib/supabaseClient';
 import Link from "next/link";
@@ -9,10 +16,10 @@ import { useReloadOnStuckLoading } from '@/utils/reloadOnStuckLoading';
 import SmallFoot from '@/components/smallFoot.jsx';
 
 // At the top, define variables for subjectName, syllabusType, and examCode
-const subjectName = 'Biology';
-const subjectSlug = subjectName.toLowerCase().replace(/\s+/g, '-');
-const examCode = '4BI1';
-const syllabusType = 'IGCSE';
+const subjectName = '{SUBJECT_NAME}';
+const subjectSlug = subjectName.toLowerCase().replace(/\\s+/g, '-');
+const examCode = '{EXAM_CODE}';
+const syllabusType = '{SYLLABUS_TYPE}';
 
 export default function CommunityNotes() {
   const [notes, setNotes] = useState([]);
@@ -47,7 +54,7 @@ export default function CommunityNotes() {
       setError(err.message);
       
       if (retryCount < maxRetries) {
-        console.log(`Retrying... attempt ${retryCount + 1}`);
+        console.log(\`Retrying... attempt \${retryCount + 1}\`);
         setTimeout(() => {
           fetchNotes(retryCount + 1);
         }, 1000);
@@ -84,7 +91,7 @@ export default function CommunityNotes() {
 
   if (error && retryCount >= maxRetries) {
     const shouldReload = window.confirm(
-      `Failed to load community notes after ${maxRetries} attempts. This might be due to a network issue or database problem.\n\nWould you like to reload the page to refresh the data? (Recommended)`
+      \`Failed to load community notes after \${maxRetries} attempts. This might be due to a network issue or database problem.\\n\\nWould you like to reload the page to refresh the data? (Recommended)\`
     );
     
     if (shouldReload) {
@@ -188,4 +195,65 @@ export default function CommunityNotes() {
       <SmallFoot />
     </div>
   );
+}`;
+
+// Subject configurations
+const subjects = [
+  { name: 'Accounting', ialCode: 'WAC1/XAC11/YAC11', igcseCode: '4AC1' },
+  { name: 'Biology', ialCode: 'WBI1/XBI11/YBI11', igcseCode: '4BI1' },
+  { name: 'Business', ialCode: 'WBS1/XBS11/YBS11', igcseCode: '4BS1' },
+  { name: 'Chemistry', ialCode: 'WCH1/XCH11/YCH11', igcseCode: '4CH1' },
+  { name: 'Computer Science', ialCode: '4CP0', igcseCode: '4CP0' },
+  { name: 'Economics', ialCode: 'WEC1/XEC11/YEC11', igcseCode: '4EC1' },
+  { name: 'English Language', ialCode: 'WEN0/XEN01/YEN01', igcseCode: '4EB1' },
+  { name: 'English Literature', ialCode: 'WET0/XET01/YET01', igcseCode: '4ET1' },
+  { name: 'Further Mathematics', ialCode: 'XFM01/YFM01', igcseCode: '4PM1' },
+  { name: 'Information Technology', ialCode: 'WIT1/XIT11/YIT11', igcseCode: '4IT1' },
+  { name: 'Mathematics', ialCode: 'XMA01/YMA01', igcseCode: '4MB1' },
+  { name: 'Physics', ialCode: 'WPH1/XPH11/YPH11', igcseCode: '4PH1' },
+  { name: 'Psychology', ialCode: 'WPS0/XPS01/YPS01', igcseCode: '' }
+];
+
+// Fix all community notes files
+function fixCommunityNotesFiles() {
+  let fixedCount = 0;
+  
+  subjects.forEach(subject => {
+    // Fix IAL files
+    if (subject.ialCode) {
+      const ialPath = path.join(__dirname, '..', 'src', 'app', 'subjects', subject.name.toLowerCase().replace(/\s+/g, '-'), 'IAL', 'communityNotes', 'page.jsx');
+      if (fs.existsSync(ialPath)) {
+        const content = communityNotesTemplate
+          .replace('{SUBJECT_NAME}', subject.name)
+          .replace('{EXAM_CODE}', subject.ialCode)
+          .replace('{SYLLABUS_TYPE}', 'IAL');
+        
+        fs.writeFileSync(ialPath, content);
+        console.log(`✅ Fixed IAL: ${subject.name}`);
+        fixedCount++;
+      }
+    }
+    
+    // Fix IGCSE files
+    if (subject.igcseCode) {
+      const igcsePath = path.join(__dirname, '..', 'src', 'app', 'subjects', subject.name.toLowerCase().replace(/\s+/g, '-'), 'IGCSE', 'communityNotes', 'page.jsx');
+      if (fs.existsSync(igcsePath)) {
+        const content = communityNotesTemplate
+          .replace('{SUBJECT_NAME}', subject.name)
+          .replace('{EXAM_CODE}', subject.igcseCode)
+          .replace('{SYLLABUS_TYPE}', 'IGCSE');
+        
+        fs.writeFileSync(igcsePath, content);
+        console.log(`✅ Fixed IGCSE: ${subject.name}`);
+        fixedCount++;
+      }
+    }
+  });
+  
+  return fixedCount;
 }
+
+// Main execution
+console.log('Fixing all community notes files...');
+const fixedCount = fixCommunityNotesFiles();
+console.log(`\n🎉 Fixed ${fixedCount} community notes files!`);
