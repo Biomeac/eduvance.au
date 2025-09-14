@@ -1,14 +1,32 @@
 // utils/supabase/server.js
 import { createServerClient } from '@supabase/ssr';
-import { supabase } from '@/lib/supabaseClient';
 import { cookies } from 'next/headers'; // Essential for App Router to access request cookies
 
 export function createServerSupabaseClient() {
   const cookieStore = cookies(); // Get the cookie store from the Next.js request headers
 
+  // Get environment variables directly (this is server-side only)
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  // Validate environment variables
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing required Supabase environment variables. Please check your environment configuration.');
+  }
+
+  // Validate URL format
+  if (!supabaseUrl.startsWith('https://') || !supabaseUrl.includes('.supabase.co')) {
+    throw new Error('Invalid Supabase URL format. Must be a valid Supabase project URL.');
+  }
+
+  // Validate key format (JWT should start with eyJ)
+  if (!supabaseAnonKey.startsWith('eyJ')) {
+    throw new Error('Invalid Supabase Anon Key format. Must be a valid JWT token.');
+  }
+
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         get: (name) => cookieStore.get(name)?.value, // How the client reads a cookie
