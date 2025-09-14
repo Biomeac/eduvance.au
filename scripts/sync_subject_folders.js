@@ -1,3 +1,4 @@
+import { supabase } from '@/lib/supabaseClient';
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');

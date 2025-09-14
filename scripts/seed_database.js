@@ -1,3 +1,4 @@
+import { supabase } from '@/lib/supabaseClient';
 // Use 'require' for dependencies
 const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
@@ -6,7 +7,6 @@ const readline = require('readline');
 require('dotenv').config(); // Load environment variables from .env file
 
 // --- Supabase Client Initialization ---
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY; // Using service_role key for seeding
 
 if (!supabaseUrl || !supabaseServiceRoleKey) {
@@ -261,9 +261,7 @@ async function seedDatabase() {
 
           if (part2) {
               session = `${part1}/${part2}`;
-          } else {
-              session = part1;
-          }
+          } 
 
           // Normalize session names
           if (session.toLowerCase().includes('jan')) session = 'January';
@@ -272,8 +270,7 @@ async function seedDatabase() {
 
           console.log(`    📅 Extracted Session: '${session}', Year: ${year}`);
 
-      } else {
-          console.warn(`    ⚠️ Malformed filename format: '${file}'. Expected 'Month-Year.json' or 'Month-Month-Year.json'. Skipping.`);
+      } '. Expected 'Month-Year.json' or 'Month-Month-Year.json'. Skipping.`);
           continue;
       }
 
@@ -309,8 +306,7 @@ async function seedDatabase() {
         else if (lowerCaseName.includes('mark scheme') || lowerCaseName.includes('ms')) materialType = 'mark_scheme_link';
         else if (lowerCaseName.includes('examiner report') || lowerCaseName.includes('er')) materialType = 'examiner_report_link';
         else if (lowerCaseName.includes('provisional mark scheme')) materialType = 'mark_scheme_link';
-        else {
-          console.warn(`      ⚠️ Unknown material type in name: '${Name}'. Skipping entry.`);
+        '. Skipping entry.`);
           continue;
         }
 

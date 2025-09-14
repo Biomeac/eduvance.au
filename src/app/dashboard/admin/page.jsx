@@ -9,14 +9,12 @@ import { supabase } from '@/lib/supabaseClient';
 // Import the usePopup hook from your utility file
 import { usePopup } from '@/components/ui/PopupNotification';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export default function AdminDashboard() {
   const [supabaseClient, setSupabaseClient] = useState(null);
   useEffect(() => {
     if (window.supabase && !supabaseClient) {
-      const client = window.supabase.createClient(supabaseUrl, supabaseKey);
+      const client = window.supabase.supabase;
       setSupabaseClient(client);
     }
   }, []);
@@ -166,14 +164,8 @@ export default function AdminDashboard() {
         setPendingResources((prev) => prev.filter((res) => res.id !== id));
         setMessage('Resource approved and moved to pending resources!');
         setMessageType('success');
-      } else {
-        setMessage('Failed to delete resource from community_resource_requests table: ' + deleteError.message);
-        setMessageType('error');
-      }
-    } else {
-      setMessage('Failed to approve resource: ' + (error ? error.message : 'Resource not found.'));
-      setMessageType('error');
-    }
+      } 
+    } 
   };
 
   // Reject a community resource request
@@ -223,9 +215,7 @@ export default function AdminDashboard() {
           delete newState[id];
           return newState;
         });
-      } else {
-        throw new Error(error.message);
-      }
+      } 
     } catch (error) {
       console.error(`Reject attempt ${retryCount + 1} failed:`, error);
       
@@ -249,17 +239,12 @@ export default function AdminDashboard() {
         setTimeout(() => {
           rejectResource_Under(id, retryCount + 1);
         }, 1000);
-      } else {
-        // All retries failed - offer manual solutions
-        const shouldReload = window.confirm(
-          `Failed to reject community resource after ${maxRetries + 1} attempts. This might be due to a network issue or database problem.\n\nWould you like to reload the page to refresh the data? (Recommended)`
+      }  attempts. This might be due to a network issue or database problem.\n\nWould you like to reload the page to refresh the data? (Recommended)`
         );
         
         if (shouldReload) {
           window.location.reload();
-        } else {
-          // Alternative: Force refresh the resource list
-          setMessage(`Failed to reject resource: ${error.message}. Refreshing resource list...`);
+        } . Refreshing resource list...`);
           setMessageType('error');
           
           // Force refresh the pending resources if that function exists
@@ -324,10 +309,7 @@ export default function AdminDashboard() {
       });
       setMessage('Resource details updated!');
       setMessageType('success');
-    } else {
-      setMessage('Failed to update resource: ' + error.message);
-      setMessageType('error');
-    }
+    } 
   };
 
   // Handler to initialize edit mode for a resource
@@ -378,11 +360,7 @@ export default function AdminDashboard() {
       if (contentDisposition.includes('zip')) {
         // Folder: try to get file list from zip (not possible client-side), so just show generic message
         fileNames = ['All PDFs in folder'];
-      } else {
-        // Single file: extract filename
-        const match = contentDisposition.match(/filename="([^"]+)"/);
-        if (match) fileNames = [match[1]];
-      }
+      } 
       
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
@@ -405,9 +383,7 @@ export default function AdminDashboard() {
           console.error('Error updating watermark status:', updateError);
           // Don't fail the whole operation, just log the error
           setMessage('Watermarked PDF downloaded! (Note: Status update failed)');
-        } else {
-          setMessage('Watermarked PDF downloaded!');
-        }
+        } 
       } catch (dbError) {
         console.error('Database update error:', dbError);
         setMessage('Watermarked PDF downloaded! (Note: Status update failed)');
@@ -451,8 +427,7 @@ export default function AdminDashboard() {
     if (!error) {
         setModResults((prev) => prev.filter((r) => r.id !== item.id));
         showPopup({ type: 'rejectSuccess', subText: 'Item deleted.' }); // Using rejectSuccess for a delete type
-    } else {
-        showPopup({ type: 'fetchError', subText: `Failed to delete item: ${error.message}` });
+    } ` });
     }
   };
 
@@ -474,16 +449,12 @@ export default function AdminDashboard() {
     if (modType === 'resource') {
       delete editableFields.submitted_at;
       delete editableFields.updated_at;
-    } else {
-      delete editableFields.submitted_at;
-      delete editableFields.approved_at;
-    }
+    } 
     const { error } = await supabaseClient.from(table).update(editableFields).eq(idField, modEditItem.id);
     setModEditLoading(false);
     if (error) {
       showPopup({ type: 'fetchError', subText: `Failed to update: ${error.message}` });
-    } else {
-      showPopup({ type: 'resourceEdited', subText: 'Item updated successfully.' });
+    } );
       setModEditItem(null);
       setModEditForm({});
       // Refresh moderation results
@@ -492,9 +463,7 @@ export default function AdminDashboard() {
       let query;
       if (modType === 'resource') {
         query = supabaseClient.from('resources').select('*');
-      } else {
-        query = supabaseClient.from('community_resource_requests').select('*');
-      }
+      } 
       if (modSubject) {
         const subjectIds = subjects.filter(s => s.name === modSubject).map(s => s.id);
         if (subjectIds.length > 0) query = query.in('subject_id', subjectIds);
@@ -544,10 +513,7 @@ export default function AdminDashboard() {
         fetchStaffUsers(); // NEW: Fetch staff users when authenticated
         // findTotalPending();
         // fetchPendingResources(); // ADDED: Fetch pending community resources
-      } else {
-        setStaffUsername('');
-        setStaffUsers([]); // Clear users on logout
-      }
+      } 
     });
     supabaseClient.auth.getSession().then(({ data }) => {
       setStaffUser(data?.session?.user || null);
@@ -560,10 +526,7 @@ export default function AdminDashboard() {
         // fetchUnapprovedResources();
         fetchExamSessions(); // Fetch exam sessions when authenticated
         fetchStaffUsers(); // NEW: Fetch staff users when authenticated
-      } else {
-        setStaffUsername('');
-        setStaffUsers([]); // Clear users on logout
-      }
+      } 
     });
     return () => subscription?.unsubscribe?.();
   }, [supabaseClient]);
@@ -574,10 +537,7 @@ export default function AdminDashboard() {
     supabaseClient.from('subjects').select('id, name, code, syllabus_type, units').order('name', { ascending: true }).then(({ data, error }) => {
       if (error) {
         showPopup({ type: 'fetchError', subText: `Subjects fetch failed: ${error.message}` });
-      } else {
-        setSubjects(data || []);
-        if (data?.[0]?.id) setSelectedSubjectId(data[0].id);
-      }
+      } 
       setLoadingSubjects(false);
     });
   }, [supabaseClient]);
@@ -594,11 +554,7 @@ export default function AdminDashboard() {
     if (error) {
       console.error("Failed to fetch exam sessions:", error.message);
       showPopup({ type: 'fetchError', subText: `Failed to fetch exam sessions: ${error.message}` });
-    } else {
-      setExamSessions(data || []);
-      if (data?.length > 0) {
-        setSelectedExamSessionId(data[0].id);
-      }
+    } 
     }
     setLoadingExamSessions(false);
   };
@@ -609,9 +565,7 @@ export default function AdminDashboard() {
     if (error) {
       // Not showing a popup for background fetches, only for user-initiated actions
       console.error("Failed to fetch latest resources:", error.message);
-    } else {
-      setLatestResources(data);
-    }
+    } 
   };
 
   const [Unapprovedpage, setUnapprovedPage] = useState(1);
@@ -648,11 +602,7 @@ export default function AdminDashboard() {
     if (error) {
         console.error("Failed to fetch unapproved resources:", error.message);
         return null;
-    } else {
-        setUnapprovedResources(data);
-        setUnapprovedPageLoading(false); 
-        return data;
-    }
+    } 
   };
   const UnapprovedTotalFetched = useRef(false)
   const loadUnapproved = async () => {
@@ -680,10 +630,7 @@ export default function AdminDashboard() {
       if (error) {
           console.error("Failed to fetch unapproved resources:", error.message);
           return null;
-      } else {
-          setUnapprovedResources(data);
-          return data;
-      }
+      } 
   };
 
   // If you want to fetch with additional filtering (e.g., only non-rejected items)
@@ -703,10 +650,7 @@ export default function AdminDashboard() {
       if (error) {
           console.error("Failed to fetch unapproved resources:", error.message);
           return null;
-      } else {
-          setUnapprovedResources(data);
-          return data;
-      }
+      } 
   };
 
   // NEW: Fetch all staff users
@@ -716,9 +660,7 @@ export default function AdminDashboard() {
     const { data, error } = await supabaseClient.from('staff_users').select('id, username, email, role, created_at').order('created_at', { ascending: false });
     if (error) {
       showPopup({ type: 'fetchError', subText: `Failed to fetch staff users: ${error.message}` });
-    } else {
-      setStaffUsers(data || []);
-    }
+    } 
     setLoadingStaffUsers(false);
   };
 
@@ -746,12 +688,7 @@ export default function AdminDashboard() {
       }, 1000); // Show the approved status for 1 second before removing
       fetchLatestResources();
       showPopup({ type: 'approveSuccess' });
-    } else {
-      // Revert the optimistic update if there was an error
-      setUnapprovedResources((prev) =>
-        prev.map((res) =>
-          res.id === id
-            ? { ...res, approved: "Approved", updated_at: res.updated_at }
+    } 
             : res
         )
       );
@@ -844,10 +781,7 @@ export default function AdminDashboard() {
         setTimeout(() => {
           rejectResource(id, retryCount + 1);
         }, delay);
-      } else {
-        // All retries failed - offer manual solutions
-        handleFinalFailure(error);
-      }
+      } 
     }
   };
   
@@ -885,12 +819,7 @@ export default function AdminDashboard() {
     
     if (shouldReload) {
       window.location.reload();
-    } else {
-      // Force refresh without reload
-      showPopup({ 
-        type: 'fetchError', 
-        subText: 'Reject failed. Refreshing resource list...' 
-      });
+    } );
       
       setTimeout(async () => {
         try {
@@ -916,8 +845,7 @@ export default function AdminDashboard() {
       setUnapprovedResources((prev) => prev.filter((res) => res.id !== id));
       fetchLatestResources();
       showPopup({ type: 'rejectSuccess', subText: 'Resource deleted.' }); // Using rejectSuccess for a delete type
-    } else {
-      showPopup({ type: 'fetchError', subText: `Failed to delete resource: ${error.message}` });
+    } ` });
     }
   };
 
@@ -933,12 +861,9 @@ export default function AdminDashboard() {
       .select("id")
       if (!staffData.some(staff => staff.id === data.user.id)) {
         showPopup({ type: 'fetchError', subText: `Login failed: Access Denied.` });
-      } else {
-        setStaffUser(data.user);
-        showPopup({ type: 'loginSuccess' });
+      } );
       }
-    } else {
-      showPopup({ type: 'fetchError', subText: `Login failed: ${error.message}` });
+    } ` });
     }
     setLoginLoading(false);
   };
@@ -949,8 +874,7 @@ export default function AdminDashboard() {
     if (!error) {
       setStaffUser(null);
       showPopup({ type: 'logoutSuccess' });
-    } else {
-      showPopup({ type: 'fetchError', subText: `Logout failed: ${error.message}` });
+    } ` });
     }
   };
 
@@ -994,8 +918,7 @@ export default function AdminDashboard() {
     } else if (!data || data.length === 0) {
       showPopup({ type: 'fetchError', subText: 'Submission did not return a new resource. Please check your database constraints.' });
       setSubmitLoading(false);
-    } else {
-      showPopup({ type: 'uploadSuccess' });
+    } );
       setTitle('');
       setLink('');
       setDescription('');
@@ -1063,8 +986,7 @@ export default function AdminDashboard() {
     } else if (!data || data.length === 0) {
       showPopup({ type: 'fetchError', subText: 'Past Paper submission did not return a new record. Please check your database constraints.' });
       setPastPaperSubmitLoading(false);
-    } else {
-      showPopup({ type: 'uploadSuccess', subText: 'Past paper uploaded successfully!' });
+    } );
       // Clear form fields
       setSelectedExamSessionId('');
       setUnitCode('');
@@ -1090,8 +1012,7 @@ export default function AdminDashboard() {
     });
     if (error) {
       showPopup({ type: 'fetchError', subText: `Failed to add subject: ${error.message}` });
-    } else {
-      showPopup({ type: 'approveSuccess', subText: 'Subject added successfully.' }); // Using approveSuccess for adding a subject
+    } ); // Using approveSuccess for adding a subject
       setNewSubjectName('');
       setNewSubjectCode('');
       setNewSubjectType('');
@@ -1166,8 +1087,7 @@ export default function AdminDashboard() {
     setEditLoading(false);
     if (error) {
       showPopup({ type: 'fetchError', subText: `Failed to update resource: ${error.message}` });
-    } else {
-      showPopup({ type: 'resourceEdited' });
+    } );
       closeEditResource();
       fetchUnapprovedResources();
       fetchLatestResources();
@@ -1180,8 +1100,7 @@ export default function AdminDashboard() {
     if (!error) {
       showPopup({ type: 'rejectSuccess', subText: 'Resource deleted.' }); // Using rejectSuccess for a delete type
       fetchLatestResources();
-    } else {
-      showPopup({ type: 'fetchError', subText: `Failed to delete resource: ${error.message}` });
+    } ` });
     }
   };
 
@@ -1267,9 +1186,7 @@ export default function AdminDashboard() {
     let query;
     if (modType === 'resource') {
       query = supabaseClient.from('resources').select('*');
-    } else {
-      query = supabaseClient.from('community_resource_requests').select('*');
-    }
+    } 
     // Filter by subject
     if (modSubject) {
       // Find all subject IDs with this name
@@ -1332,9 +1249,7 @@ export default function AdminDashboard() {
         showPopup({ type: 'approveSuccess', subText: result.message || 'User added successfully!' });
         setNewUserData({ username: '', email: '', password: '', role: 'moderator' }); // Reset form
         fetchStaffUsers(); // Refresh the user list in the UI
-      } else {
-        // Handle errors returned from your backend API
-        showPopup({ type: 'fetchError', subText: result.message || 'Failed to add user.' });
+      } );
       }
     } catch (error) {
       // Handle network errors or other unexpected issues
@@ -1366,8 +1281,7 @@ export default function AdminDashboard() {
 
     if (error) {
       showPopup({ type: 'fetchError', subText: `Failed to update user role: ${error.message}` });
-    } else {
-      showPopup({ type: 'resourceEdited', subText: 'User role updated successfully!' });
+    } );
       setSelectedUserIdForUpdate('');
       setSelectedUserNewRole('moderator');
       fetchStaffUsers(); // Refresh the user list
@@ -1399,8 +1313,7 @@ export default function AdminDashboard() {
 
     if (error) {
       showPopup({ type: 'fetchError', subText: `Failed to remove user: ${error.message}` });
-    } else {
-      showPopup({ type: 'rejectSuccess', subText: 'User removed successfully!' });
+    } );
       setSelectedUserIdForRemove('');
       fetchStaffUsers(); // Refresh the user list
     }
@@ -1416,9 +1329,7 @@ export default function AdminDashboard() {
     let query;
     if (modType === 'resource') {
       query = supabaseClient.from('resources').select('*');
-    } else {
-      query = supabaseClient.from('community_resource_requests').select('*');
-    }
+    } 
 
     if (modStaffUser) {
       const selectedStaffUser = staffUsers.find(user => user.username === modStaffUser);
@@ -1519,9 +1430,7 @@ export default function AdminDashboard() {
                             <option value="General">General</option>
                           </select>
                         );
-                      } else {
-                        return (
-                          <input type="text" value={unitChapter} onChange={(e) => setUnitChapter(e.target.value)} placeholder="Unit/Chapter (optional)" className="w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition" />
+                      }  onChange={(e) => setUnitChapter(e.target.value)} placeholder="Unit/Chapter (optional)" className="w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition" />
                         );
                       }
                     })()}
@@ -1620,9 +1529,7 @@ export default function AdminDashboard() {
                           {/* <option value="General">General</option> */}
                         </select>
                       );
-                    } else {
-                      return (
-                        <input type="text" value={unitCode} onChange={(e) => setUnitCode(e.target.value)} placeholder="Unit Code (e.g., WAC11) *" className="w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition" required />
+                    }  onChange={(e) => setUnitCode(e.target.value)} placeholder="Unit Code (e.g., WAC11) *" className="w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition" required />
                       );
                     }
                   })()}
@@ -1901,9 +1808,7 @@ export default function AdminDashboard() {
                             <option value="General">General</option>
                           </select>
                         );
-                      } else {
-                        return (
-                          <input name="unit_chapter_name" value={editForm.unit_chapter_name} onChange={handleEditFormChange} placeholder="Unit/Chapter (optional)" className="w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition" />
+                      }  onChange={handleEditFormChange} placeholder="Unit/Chapter (optional)" className="w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition" />
                         );
                       }
                     })()}
@@ -2059,11 +1964,7 @@ export default function AdminDashboard() {
                                       <option value="General">General</option>
                                     </select>
                                   );
-                                } else {
-                                  return (
-                                    <input
-                                      type="text"
-                                      value={editedResourceData[res.id]?.unit_chapter_name ?? res.unit_chapter_name}
+                                } 
                                       onChange={e => setEditedResourceData(prev => ({ ...prev, [res.id]: { ...prev[res.id], unit_chapter_name: e.target.value } }))}
                                       className="border px-2 py-1 rounded-md text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition"
                                       placeholder="Unit/Chapter Name (Optional)"

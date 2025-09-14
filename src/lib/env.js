@@ -1,3 +1,4 @@
+import { supabase } from '@/lib/supabaseClient';
 // src/lib/env.js
 // Environment variable validation and security
 

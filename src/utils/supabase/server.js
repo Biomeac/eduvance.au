@@ -1,5 +1,6 @@
 // utils/supabase/server.js
 import { createServerClient } from '@supabase/ssr';
+import { supabase } from '@/lib/supabaseClient';
 import { cookies } from 'next/headers'; // Essential for App Router to access request cookies
 
 export function createServerSupabaseClient() {

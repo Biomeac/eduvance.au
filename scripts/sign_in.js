@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { supabase } from '@/lib/supabaseClient';
 import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
 import { google } from 'googleapis';
@@ -54,9 +55,7 @@ async function checkResources() {
         .eq('id', row.id);
       if (updateError) console.error(updateError);
       else console.log(`Unapproved`);
-    } else {
-      console.log(`Passed`);
-    }
+    } 
   }
 }
 

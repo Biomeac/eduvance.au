@@ -1,3 +1,4 @@
+import { supabase } from '@/lib/supabaseClient';
 // Load environment variables from .env file
 require('dotenv').config();
 
@@ -6,15 +7,10 @@ const { createClient } = require('@supabase/supabase-js');
 const readline = require('readline'); // For interactive CLI input
 
 // --- Supabase Client Initialization ---
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Error: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set in environment variables.');
-  process.exit(1);
-}
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+const supabase = supabase;
 
 // --- Readline Interface for CLI Input ---
 const rl = readline.createInterface({
@@ -38,9 +34,7 @@ async function listSubjects() {
     console.error('Error fetching subjects:', error.message);
   } else if (data.length === 0) {
     console.log('No subjects found.');
-  } else {
-    data.forEach(subject => {
-      console.log(`ID: ${subject.id}\n  Name: ${subject.name}\n  Code: ${subject.code || 'N/A'}`);
+  } \n  Name: ${subject.name}\n  Code: ${subject.code || 'N/A'}`);
     });
     console.log(`Total subjects: ${data.length}`);
   }
@@ -61,9 +55,7 @@ async function listExamSessions() {
     console.error('Error fetching exam sessions:', error.message);
   } else if (data.length === 0) {
     console.log('No exam sessions found.');
-  } else {
-    data.forEach(session => {
-      console.log(`ID: ${session.id}\n  Session: ${session.session} ${session.year}`);
+  } \n  Session: ${session.session} ${session.year}`);
     });
     console.log(`Total exam sessions: ${data.length}`);
   }
@@ -124,9 +116,7 @@ async function listPapersByCriteria() {
             const parsedYear = parseInt(yearInput);
             if (!isNaN(parsedYear)) {
               examSessionQuery = examSessionQuery.eq('year', parsedYear);
-            } else {
-              console.warn('Invalid year input, ignoring year filter.');
-            }
+            } 
           }
 
           const { data: examSessionData, error: examSessionError } = await examSessionQuery;
@@ -218,9 +208,7 @@ async function listPapersByCriteria() {
           console.error('Error fetching papers:', papersError.message);
         } else if (papers.length === 0) {
           console.log('No papers found matching your criteria.');
-        } else {
-          papers.forEach(paper => {
-            console.log(`\nPaper ID: ${paper.id}`);
+        } `);
             console.log(`  Subject: ${paper.subjects?.name || 'N/A'} (Unit: ${paper.unit_code})`);
             console.log(`  Session: ${paper.exam_sessions?.session || 'N/A'} ${paper.exam_sessions?.year || 'N/A'}`);
             // --- MODIFIED LINES TO SHOW FULL URLS ---

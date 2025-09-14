@@ -1,14 +1,10 @@
+import { supabase } from '@/lib/supabaseClient';
 "use client";
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { createClient } from '@supabase/supabase-js';
 import { useReloadOnStuckLoading } from '@/utils/reloadOnStuckLoading';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
 // Remove: import { useRouter } from 'next/router';
 import SmallFoot from '@/components/smallFoot.jsx';
 
@@ -120,9 +116,7 @@ export default function IALResources() {
   const toggleTag = (tagName) => {
     if (selectedTags.includes(tagName)) {
       setSelectedTags(selectedTags.filter(t => t !== tagName));
-    } else {
-      setSelectedTags([...selectedTags, tagName]);
-    }
+    } 
   };
 
   useReloadOnStuckLoading(loading);

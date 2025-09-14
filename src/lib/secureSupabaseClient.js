@@ -2,15 +2,12 @@
 // Centralized, secure Supabase client configuration
 
 import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabaseClient';
 
 // Environment variable validation
 function validateEnvironment() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Missing required Supabase environment variables. Please check your .env.local file.');
-  }
+    
+  
 
   // Validate URL format
   if (!supabaseUrl.startsWith('https://') || !supabaseUrl.includes('.supabase.co')) {

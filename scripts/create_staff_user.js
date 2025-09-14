@@ -1,3 +1,4 @@
+import { supabase } from '@/lib/supabaseClient';
 // Load environment variables from .env file
 require('dotenv').config();
 
@@ -5,7 +6,6 @@ const { createClient } = require('@supabase/supabase-js');
 const readline = require('readline');
 const bcrypt = require('bcryptjs');
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseServiceRoleKey) {
@@ -70,9 +70,7 @@ async function main() {
     console.error('Failed to create staff user in staff_users table:', error.message);
     // Optionally, delete the Auth user to avoid orphaned Auth users
     await supabase.auth.admin.deleteUser(userId);
-  } else {
-    console.log('Staff user created successfully:', data[0]);
-  }
+  } 
 
   // After setStaffUser(data.user);
   const { data: staffData, error: staffError } = await supabase
