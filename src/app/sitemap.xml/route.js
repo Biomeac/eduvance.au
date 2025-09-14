@@ -2,39 +2,40 @@
 // dotenv.config();
 
 import { createClient } from '@supabase/supabase-js';
-// Pasted from staffAccess
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'YOUR_SUPABASE_PROJECT_URL';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY';
+
+// Secure environment variable handling
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 let supabase = null;
-try {
-    if (supabaseUrl && supabaseAnonKey && supabaseUrl.startsWith('http')) {
+
+// Validate environment variables
+if (!supabaseUrl || !supabaseAnonKey) {
+    console.error("Missing Supabase environment variables. Please ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set correctly.");
+} else if (!supabaseUrl.startsWith('https://') || !supabaseUrl.includes('.supabase.co')) {
+    console.error("Invalid Supabase URL format. Must be a valid Supabase project URL.");
+} else if (!supabaseAnonKey.startsWith('eyJ')) {
+    console.error("Invalid Supabase Anon Key format. Must be a valid JWT token.");
+} else {
+    try {
         supabase = createClient(supabaseUrl, supabaseAnonKey);
-    } else {
-        console.error("Supabase URL or Anon Key is invalid. Please ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set correctly in your environment variables.");
+    } catch (e) {    
+        console.error("Error initializing Supabase client:", e.message);
     }
-} catch (e) {    
-    console.error("Error initializing Supabase client:", e.message);
 }
 
-// export default function sitemap() {
-//     let subject_list = [];
-//     supabase
-//     .from('subjects')
-//     .select('name')
-//     .order('name', { ascending: true })
-//     .then(({ data, error }) => {
-//         if (!error) {
-//             subject_list = [...new Set(data.map(item => item.name))];
-//         }
-//     })
-//     .finally(console.log(subject_list))
-// }
 function toKebabCase(str) {
   return str.toLowerCase().replace(/\s+/g, '-');
 }
+
 async function data() {
   let subject_list = [];
+  
+  if (!supabase) {
+    console.error("Supabase client not initialized. Cannot fetch subjects.");
+    return [];
+  }
+  
   try {
     const { data, error } = await supabase
       .from('subjects')
@@ -43,7 +44,7 @@ async function data() {
 
     if (error) {
       console.error("Error fetching subjects:", error);
-      return;
+      return [];
     }
 
     subject_list = data;
@@ -86,6 +87,7 @@ async function data() {
 
   } catch (e) {
     console.error("Unexpected error:", e);
+    return [];
   }
 }
 
