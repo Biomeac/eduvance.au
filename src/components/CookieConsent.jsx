@@ -59,8 +59,19 @@ const CookieConsent = () => {
   if (!showModal) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 p-4" style={{backdropFilter: 'blur(8px)'}}>
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 ease-out">
+    <>
+      {/* Blur overlay */}
+      <div 
+        className="fixed inset-0 z-40" 
+        style={{
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          background: 'rgba(255, 255, 255, 0.1)'
+        }}
+      />
+      {/* Modal container */}
+      <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 ease-out">
         {!showDetails ? (
           <div className="p-8">
             <div className="text-center mb-6">
@@ -126,8 +137,9 @@ const CookieConsent = () => {
         ) : (
           <CookiePreferences onSave={savePreferences} onCancel={() => setShowDetails(false)} />
         )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
