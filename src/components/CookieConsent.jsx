@@ -2,14 +2,15 @@
 import React, { useState, useEffect } from 'react';
 
 const CookieConsent = () => {
-  const [showBanner, setShowBanner] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     // Check if user has already made a choice
     const consent = localStorage.getItem('cookieConsent');
     if (!consent) {
-      setShowBanner(true);
+      // Add a small delay for better UX
+      setTimeout(() => setShowModal(true), 1000);
     }
   }, []);
 
@@ -21,7 +22,7 @@ const CookieConsent = () => {
       marketing: true,
       functional: true
     }));
-    setShowBanner(false);
+    setShowModal(false);
     // Here you would initialize tracking scripts
     initializeTracking();
   };
@@ -34,13 +35,13 @@ const CookieConsent = () => {
       marketing: false,
       functional: false
     }));
-    setShowBanner(false);
+    setShowModal(false);
   };
 
   const savePreferences = (preferences) => {
     localStorage.setItem('cookieConsent', 'custom');
     localStorage.setItem('cookiePreferences', JSON.stringify(preferences));
-    setShowBanner(false);
+    setShowModal(false);
     setShowDetails(false);
     
     // Initialize tracking based on preferences
@@ -55,41 +56,70 @@ const CookieConsent = () => {
     console.log('Tracking initialized based on user consent');
   };
 
-  if (!showBanner) return null;
+  if (!showModal) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 p-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 ease-out">
         {!showDetails ? (
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                We use cookies to enhance your experience
+          <div className="p-8">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                Cookie Preferences
               </h3>
-              <p className="text-sm text-gray-600">
-                We use cookies to provide you with the best possible experience on our website. 
-                Some cookies are necessary for the site to function, while others help us understand 
-                how you use our site so we can improve it.
+              <p className="text-gray-600 leading-relaxed">
+                We use cookies to enhance your experience and analyze our traffic. 
+                Choose your preferences below.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-2">
+            
+            <div className="space-y-3 mb-8">
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                  <span className="text-sm font-medium text-gray-900">Necessary</span>
+                </div>
+                <span className="text-xs text-gray-500">Always active</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                  <span className="text-sm font-medium text-gray-900">Analytics</span>
+                </div>
+                <span className="text-xs text-gray-500">Optional</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  <span className="text-sm font-medium text-gray-900">Marketing</span>
+                </div>
+                <span className="text-xs text-gray-500">Optional</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3">
               <button
-                onClick={() => setShowDetails(true)}
-                className="px-4 py-2 text-sm text-blue-600 hover:text-blue-800 underline"
+                onClick={acceptAll}
+                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
               >
-                Customize
+                Accept All Cookies
               </button>
               <button
                 onClick={acceptNecessary}
-                className="px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition"
+                className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-200"
               >
                 Necessary Only
               </button>
               <button
-                onClick={acceptAll}
-                className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                onClick={() => setShowDetails(true)}
+                className="w-full text-blue-600 py-2 px-4 text-sm font-medium hover:text-blue-700 transition-colors duration-200"
               >
-                Accept All
+                Customize Preferences
               </button>
             </div>
           </div>
@@ -122,74 +152,114 @@ const CookiePreferences = ({ onSave, onCancel }) => {
   };
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900">Cookie Preferences</h3>
+    <div className="p-8">
+      <div className="text-center mb-6">
+        <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+        <h3 className="text-2xl font-bold text-gray-900 mb-2">
+          Customize Your Preferences
+        </h3>
+        <p className="text-gray-600 leading-relaxed">
+          Choose which cookies you'd like to allow. You can change these settings at any time.
+        </p>
+      </div>
       
-      <div className="space-y-4">
+      <div className="space-y-4 mb-8">
         <CookieCategory
           title="Necessary Cookies"
-          description="These cookies are essential for the website to function properly. They cannot be disabled."
+          description="Essential for the website to function properly. Cannot be disabled."
           enabled={preferences.necessary}
           onToggle={() => handleToggle('necessary')}
           disabled={true}
+          color="green"
         />
         
         <CookieCategory
           title="Analytics Cookies"
-          description="These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously."
+          description="Help us understand how visitors interact with our website anonymously."
           enabled={preferences.analytics}
           onToggle={() => handleToggle('analytics')}
+          color="blue"
         />
         
         <CookieCategory
           title="Marketing Cookies"
-          description="These cookies are used to track visitors across websites to display relevant and engaging advertisements."
+          description="Used to display relevant advertisements across websites."
           enabled={preferences.marketing}
           onToggle={() => handleToggle('marketing')}
+          color="purple"
         />
         
         <CookieCategory
           title="Functional Cookies"
-          description="These cookies enable enhanced functionality and personalization, such as remembering your preferences."
+          description="Enable enhanced functionality and personalization features."
           enabled={preferences.functional}
           onToggle={() => handleToggle('functional')}
+          color="orange"
         />
       </div>
       
-      <div className="flex justify-end gap-2 pt-4 border-t border-gray-200">
-        <button
-          onClick={onCancel}
-          className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 underline"
-        >
-          Cancel
-        </button>
+      <div className="flex flex-col gap-3">
         <button
           onClick={handleSave}
-          className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
         >
           Save Preferences
+        </button>
+        <button
+          onClick={onCancel}
+          className="w-full text-gray-600 py-2 px-4 text-sm font-medium hover:text-gray-700 transition-colors duration-200"
+        >
+          Back to Quick Options
         </button>
       </div>
     </div>
   );
 };
 
-const CookieCategory = ({ title, description, enabled, onToggle, disabled = false }) => (
-  <div className="flex items-start justify-between p-3 bg-gray-50 rounded-lg">
-    <div className="flex-1 mr-4">
-      <h4 className="font-medium text-gray-900">{title}</h4>
-      <p className="text-sm text-gray-600 mt-1">{description}</p>
+const CookieCategory = ({ title, description, enabled, onToggle, disabled = false, color = "blue" }) => {
+  const colorClasses = {
+    green: "bg-green-500",
+    blue: "bg-blue-500", 
+    purple: "bg-purple-500",
+    orange: "bg-orange-500"
+  };
+
+  return (
+    <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors duration-200">
+      <div className="flex items-start justify-between">
+        <div className="flex-1 mr-4">
+          <div className="flex items-center mb-2">
+            <div className={`w-3 h-3 ${colorClasses[color]} rounded-full mr-3`}></div>
+            <h4 className="font-semibold text-gray-900">{title}</h4>
+          </div>
+          <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
+        </div>
+        <label className="flex items-center cursor-pointer">
+          <div className="relative">
+            <input
+              type="checkbox"
+              checked={enabled}
+              onChange={onToggle}
+              disabled={disabled}
+              className="sr-only"
+            />
+            <div className={`w-12 h-6 rounded-full transition-colors duration-200 ${
+              enabled ? 'bg-blue-600' : 'bg-gray-300'
+            } ${disabled ? 'opacity-50' : ''}`}>
+              <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-200 ${
+                enabled ? 'translate-x-6' : 'translate-x-0.5'
+              } mt-0.5`}></div>
+            </div>
+          </div>
+        </label>
+      </div>
     </div>
-    <label className="flex items-center">
-      <input
-        type="checkbox"
-        checked={enabled}
-        onChange={onToggle}
-        disabled={disabled}
-        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 disabled:opacity-50"
-      />
-    </label>
-  </div>
-);
+  );
+};
 
 export default CookieConsent;
