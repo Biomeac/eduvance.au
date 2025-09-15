@@ -164,26 +164,26 @@ const CookiePreferences = ({ onSave, onCancel }) => {
   };
 
   return (
-    <div className="p-8">
-      <div className="text-center mb-6">
-        <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className="p-6 max-h-[80vh] overflow-y-auto">
+      <div className="text-center mb-4">
+        <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">
-          Customize Your Preferences
+        <h3 className="text-xl font-bold text-gray-900 mb-2">
+          Customize Preferences
         </h3>
-        <p className="text-gray-600 leading-relaxed">
-          Choose which cookies you'd like to allow. You can change these settings at any time.
+        <p className="text-sm text-gray-600">
+          Choose which cookies to allow
         </p>
       </div>
       
-      <div className="space-y-4 mb-8">
+      <div className="space-y-3 mb-6">
         <CookieCategory
-          title="Necessary Cookies"
-          description="Essential for the website to function properly. Cannot be disabled."
+          title="Necessary"
+          description="Essential for website function"
           enabled={preferences.necessary}
           onToggle={() => handleToggle('necessary')}
           disabled={true}
@@ -191,34 +191,34 @@ const CookiePreferences = ({ onSave, onCancel }) => {
         />
         
         <CookieCategory
-          title="Analytics Cookies"
-          description="Help us understand how visitors interact with our website anonymously."
+          title="Analytics"
+          description="Help us understand usage"
           enabled={preferences.analytics}
           onToggle={() => handleToggle('analytics')}
           color="blue"
         />
         
         <CookieCategory
-          title="Marketing Cookies"
-          description="Used to display relevant advertisements across websites."
+          title="Marketing"
+          description="Show relevant ads"
           enabled={preferences.marketing}
           onToggle={() => handleToggle('marketing')}
           color="purple"
         />
         
         <CookieCategory
-          title="Functional Cookies"
-          description="Enable enhanced functionality and personalization features."
+          title="Functional"
+          description="Enhanced features"
           enabled={preferences.functional}
           onToggle={() => handleToggle('functional')}
           color="orange"
         />
       </div>
       
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
         <button
           onClick={handleSave}
-          className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
+          className="w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200"
         >
           Save Preferences
         </button>
@@ -242,14 +242,14 @@ const CookieCategory = ({ title, description, enabled, onToggle, disabled = fals
   };
 
   return (
-    <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors duration-200">
-      <div className="flex items-start justify-between">
-        <div className="flex-1 mr-4">
-          <div className="flex items-center mb-2">
-            <div className={`w-3 h-3 ${colorClasses[color]} rounded-full mr-3`}></div>
-            <h4 className="font-semibold text-gray-900">{title}</h4>
+    <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 hover:bg-gray-100 transition-colors duration-200">
+      <div className="flex items-center justify-between">
+        <div className="flex-1 mr-3">
+          <div className="flex items-center mb-1">
+            <div className={`w-2.5 h-2.5 ${colorClasses[color]} rounded-full mr-2`}></div>
+            <h4 className="font-medium text-gray-900 text-sm">{title}</h4>
           </div>
-          <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
+          <p className="text-xs text-gray-600 ml-4">{description}</p>
         </div>
         <label className="flex items-center cursor-pointer">
           <div className="relative">
@@ -260,11 +260,11 @@ const CookieCategory = ({ title, description, enabled, onToggle, disabled = fals
               disabled={disabled}
               className="sr-only"
             />
-            <div className={`w-12 h-6 rounded-full transition-colors duration-200 ${
+            <div className={`w-10 h-5 rounded-full transition-colors duration-200 ${
               enabled ? 'bg-blue-600' : 'bg-gray-300'
             } ${disabled ? 'opacity-50' : ''}`}>
-              <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-200 ${
-                enabled ? 'translate-x-6' : 'translate-x-0.5'
+              <div className={`w-4 h-4 bg-white rounded-full shadow-sm transform transition-transform duration-200 ${
+                enabled ? 'translate-x-5' : 'translate-x-0.5'
               } mt-0.5`}></div>
             </div>
           </div>
