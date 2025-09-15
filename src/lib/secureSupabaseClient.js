@@ -2,7 +2,6 @@
 // Centralized, secure Supabase client configuration
 
 import { createClient } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabaseClient';
 
 // Environment variable validation
 function validateEnvironment() {

@@ -3,19 +3,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 // Pasted from staffAccess
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'YOUR_SUPABASE_PROJECT_URL';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY';
-
-let supabase = null;
-try {
-    if (supabaseUrl && supabaseAnonKey && supabaseUrl.startsWith('http')) {
-        supabase = createClient(supabaseUrl, supabaseAnonKey);
-    } else {
-        console.error("Supabase URL or Anon Key is invalid. Please ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set correctly in your environment variables.");
-    }
-} catch (e) {    
-    console.error("Error initializing Supabase client:", e.message);
-}
+import { supabase } from '@/lib/supabaseClient';
 
 // export default function sitemap() {
 //     let subject_list = [];
