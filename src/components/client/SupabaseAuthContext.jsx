@@ -2,7 +2,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient"; // This will now be the createBrowserClient
+import { apiClient } from "@/lib/secure-api-client";
 
 const SupabaseAuthContext = createContext({
   session: null,
@@ -19,56 +19,47 @@ export default function SupabaseAuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let mounted = true;
-
-    // Initial session check
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (mounted) {
-        setSession(session);
-        setLoading(false);
-      }
-    }).catch(error => {
-      console.error("Error fetching initial Supabase session:", error);
-      if (mounted) setLoading(false);
-    });
-
-    // Listen for auth state changes (login, logout, token refresh)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (mounted) {
-        setSession(session);
-        // setLoading(false); // No need to set loading here, it's already false after initial load
-      }
-    });
-
-    // Cleanup subscription on component unmount
-    return () => {
-      mounted = false;
-      subscription.unsubscribe();
-    };
+    // Check authentication status using API client
+    const isAuth = apiClient.isAuthenticated();
+    const username = apiClient.getUsername();
+    
+    if (isAuth && username) {
+      setSession({ user: { email: username } });
+    } else {
+      setSession(null);
+    }
+    setLoading(false);
   }, []);
 
-  // You can also expose auth methods here if you want to use them directly from context
+  // Auth methods using API client
   const signIn = async (credentials) => {
-    setLoading(true); // Indicate loading when auth action starts
-    const { data, error } = await supabase.auth.signInWithPassword(credentials);
-    setLoading(false);
-    if (error) throw error;
-    return data;
+    setLoading(true);
+    try {
+      const data = await apiClient.login(credentials.email, credentials.password);
+      setSession({ user: { email: data.user.email } });
+      return data;
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const signOut = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.signOut();
-    setLoading(false);
-    if (error) throw error;
+    try {
+      await apiClient.logout();
+      setSession(null);
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const signUp = async (credentials) => {
-    setLoading(true);
-    const { data, error } = await supabase.auth.signUp(credentials);
-    setLoading(false);
-    if (error) throw error;
-    return data;
+    // Note: Sign up functionality would need to be implemented in the API
+    throw new Error('Sign up not implemented in API client');
   };
 
 

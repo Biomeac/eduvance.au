@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabaseClient';
+import { apiClient } from '@/lib/secure-api-client';
 import SmallFoot from '@/components/smallFoot';
 export default function Subject() {
   function toKebabCase(str) {

@@ -1,6 +1,6 @@
 "use client"
 
-import { supabase } from '@/lib/supabaseClient';
+import { apiClient } from '@/lib/secure-api-client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import SmallFoot from '@/components/smallFoot.jsx';

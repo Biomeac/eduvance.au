@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 // REMOVED: import { createClient } from '@supabase/supabase-js'; // Removed this line
-import { supabase } from '@/lib/supabaseClient'; // Use the shared browser client
+import { apiClient } from '@/lib/secure-api-client';
 import SmallFoot from '@/components/smallFoot.jsx';
 import { LoaderCircle } from "lucide-react";
 

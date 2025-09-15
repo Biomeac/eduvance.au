@@ -2,7 +2,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Home } from '@/components/homenav';
-import { supabase } from '@/lib/supabaseClient';
+import { apiClient } from '@/lib/secure-api-client';
 import { Auth } from '@supabase/auth-ui-react'; // Import Auth UI
 import { ThemeSupa } from '@supabase/auth-ui-shared'; // Import ThemeSupa
 
@@ -37,24 +37,10 @@ export default function ContributorUploadResource() {
 
   // Fetch current user session
   useEffect(() => {
-    async function getSession() {
-      setLoadingUserSession(true);
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-      setLoadingUserSession(false);
-    }
-    getSession();
-
-    // Listen for auth state changes
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-      }
-    );
-
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
+    // Check if user is authenticated via API client
+    const isAuth = apiClient.isAuthenticated();
+    setSession(isAuth ? { user: { email: apiClient.getUsername() } } : null);
+    setLoadingUserSession(false);
   }, []);
 
   // Fetch subjects

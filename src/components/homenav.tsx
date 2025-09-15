@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from "next/link";
 import { useState, useRef, useEffect } from 'react';
 import { ChevronRight } from 'lucide-react';
-import { supabase } from '@/lib/supabaseClient'; // This is your createBrowserClient
+import { apiClient } from '@/lib/secure-api-client';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import BlueSolo from '@/assets/png/BlueSolo.png'
@@ -242,7 +242,7 @@ function Home(props) {
 
   const handleLogout = async () => {
     console.debug('Attempting to log out...');
-    const { error } = await supabase.auth.signOut();
+    await apiClient.logout();
     if (error) {
       console.error('Logout failed:', error.message);
       return;

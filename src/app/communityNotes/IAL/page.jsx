@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { supabase } from "../lib/supabaseClient";
+import { apiClient } from '@/lib/secure-api-client';
 import { useSupabaseAuth } from "@/components/client/SupabaseAuthContext";
 import SmallFoot from '@/components/smallFoot.jsx';
 import { Auth } from '@supabase/auth-ui-react';

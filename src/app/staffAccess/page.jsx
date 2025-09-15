@@ -38,34 +38,17 @@ export default function StaffAuthPage() {
   // --- UPDATED: Supabase Auth State Listener and Redirection ---
   useEffect(() => {
     const authHandler = async () => {
-      if (!supabase) {
-        setMessage("Supabase client not initialized. Please check your URL and API key.");
+      // Check if user is authenticated via API client
+      const isAuth = apiClient.isAuthenticated();
+      
+      if (!isAuth) {
+        setMessage("Please log in to access staff area.");
+        router.replace('/');
         return;
       }
 
-      // Fetch the current session immediately on component load.
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-
-      if (session) {
-        setLoading(true);
-        const { data: staffData, error: staffError } = await supabase
-          .from('staff_users')
-          .select('role')
-          .eq('id', session.user.id)
-          .single();
-        
-        setLoading(false);
-
-        // Security check: If the user is not in the staff_users table, sign them out.
-        if (staffError || !staffData) {
-          console.error("User is not in staff_users table or an error occurred:", staffError);
-          setMessage("Access denied. You are not a registered staff member.");
-          // IMPORTANT: Sign out the unauthorized user to prevent access.
-          await supabase.auth.signOut();
-          router.replace('/'); 
-          return;
-        }
+      setSession({ user: { email: apiClient.getUsername() } });
+      setLoading(false);
 
         // If authorized, redirect based on their role.
         if (staffData.role === 'admin') {

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { apiClient } from '@/lib/secure-api-client';
 import {Home} from '@/components/homenav'
 import { useReloadOnStuckLoading } from '@/utils/reloadOnStuckLoading';
 
