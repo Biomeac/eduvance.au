@@ -1,0 +1,202 @@
+Resource Upload and Staff Dashboard Development:
+   ✔ Staff Auth and Supabase Auth DB Setup
+   ✔ Resources DB table + Unit recongnition
+   ✔ Resources DB link to all subjects
+   ✔ Resources Upload Mechanism + Staff Dashboard Base Code
+   ✔ Staff Console Update for contributor's approval @done(25-06-27 15:44)
+   ✔ Admin Dashboard Addition + Admin Auth Setup
+   ✔ Admin Permissions + Resource Authorization Status DB update
+   ✔ Admin Subject Moderation Feature + Modular Subjects Update @done(25-06-26 19:45)
+   ✔ Admin and Staff Dashboard Responsiveness @done(25-07-06 19:28)
+   ✔ Add Staff_ID data entry for the resource upload system
+   ✔ Unit Selection dropdown and selection form update @done(25-06-27 15:44)
+   ✔ Update resource type selection form update @done(25-06-27 15:44)
+   ✔ Update Staff console UI for better user experience @done(25-07-04 15:34)
+
+   Admin Console Rework v2 :
+      ☐ Introduce pages
+      ☐ Only count approved notes for leaderboard
+      ☐ Improve moderation view with features like keyword search, filters, and pages
+   
+   Moderator Console Reword v2 :
+      ☐ Introduce Pages
+      ☐ Update approve section with sort feature
+
+Modular Subject Update and Admin Console:
+   ✔ Add Admin Subject Adding Feature with necessary inputs @done(25-06-26 19:00)
+   ✔ Update Main Subject selection page for resources to fetch subjects from database @done(25-06-26 18:21)
+   ✔ Add a system to generate files and pages for the created subject @done(25-06-26 19:45)
+   ✔ Update the system for generating files for new subjects @done(25-07-04 15:34)
+   ✔ Update Admin console UI for better user experience @done(25-07-04 15:34)
+   ✔ Update approve section on admin console for editing the resources @done(25-07-04 15:34)
+   ✔ Update resources box div for extra information on the resource and staff members @done(25-07-04 15:34)
+
+User Authentication :
+   ✔ Setup supabase authentication system (providers : email, google, discord) @done(25-06-29 06:24)
+   ✔ Setup google developer console settings and sync with supabase for auth page @done(25-06-29 06:23)
+   ✔ Setup discord developer app and sync with supabase for auth page @done(25-07-04 15:34)
+   ☐ Add email list collection system for marketing purposes
+   ✔ Modify resources page to ask for authentication or user sign in verification for access @done(25-06-29 06:24)
+   ✔ Ensure log out system works and is up-to-date @done(25-07-21 11:37)
+
+New Resources Pages Update :
+   ✔ Update UI to make the subject resource selection better @done(25-06-29 06:20)
+   ✔ Add subject selection and new modular file structure for sub-links @done(25-06-29 06:23)
+   ✔ Updated UI + minor banner and menu changes @done(25-06-30 13:35)
+   ✔ Add auth required only at the resources page for subjects @done(25-06-30 13:46)
+   ✔ Add "Contribute your own notes" Button to the bottom of the page @done(25-06-30 13:35)
+   ✔ Add Join Discord Server button to the bottom of the page @done(25-06-30 13:35)
+   ✔ Add subject and resources selection side menu to main website page @done(25-06-30 13:35)
+   ✔ Update Resources section UI display for notes and resources @done(25-06-30 15:07)
+   ✔ Update the top bar (eduvance button -> main page) and side menu for better scalability @done(25-07-02 16:54)
+   ✔ Add transition logic and responsive design for the side bar @done(25-07-02 16:54)
+   ✔ Update side menu bar UI and options for better navigation @done(25-07-02 16:54)
+   ✔ Update subject pages for button updates and user profile showcase @done(25-07-02 16:54)
+   ✔ Update session log out logic for top bar user showcase display @done(25-07-18 14:39)
+   ✔ Ensure logged in session is checked for resource page @done(25-07-18 14:39)
+   ✔ Scrollable side bar @done(25-07-05 16:40)
+   ✔ Breakpoints for mobile responsive design @done(25-07-05 16:48)
+   ✔ Consistent top/side bar updates for overall website (Made a homenav.tsx component) @done(25-07-05 10:35)
+   ✔ Update Community Notes pages logic (only include community contributed notes) @done(25-07-02 17:38)
+   ✔ Update Past Paper loading feature for all pages @done(25-06-27 16:34)
+
+   ✔ Update UI and Cards elements for all resources pages for all subjects @done(25-07-13 04:22)
+   ✔ Update UI and Cards elements for all community notes pages for all subjects @done(25-07-13 04:22)
+   ✔ Sync and Update UI for all subject pages individually @done(25-07-13 04:22)
+   ✔ Update all pages to accomodate the universal top bar @done(25-07-07 23:29)
+
+   ✔ Updated Physics IAL pages for following the new units field system @done(25-07-12 16:16)
+   ✔ Updated Physics IGCSE pages for following the new units field system @done(25-07-12 16:16)
+   ✔ Updated Biology and Physics Resources Tables and tested for data showcase @done(25-07-12 16:16)
+   ✔ Updated folder name from sub links to subjects @done(25-07-12 16:16)
+   ✔ Added universal auth system for easy user experience @done(25-07-12 16:16)
+
+   ✔ Update tabs so empty tabs are hidden
+   ✔ Update tag filter system for visual button
+   ✔ Update tag filter system for colour mapping
+   ✔ Update tag filter dropdown with multiple choice system
+   ✔ Update tag filter system for all pages
+
+Other Pages:
+   ✔ Other miscellaneous pages for the website (About Eduvance, IGCSE/A Levels, Grading System Explained, FAQs and more) @done(25-07-21 11:37)
+      - More (Header)
+         - Examination FAQ (Exam Structure, Grading System)
+         - what else?
+      - About Eduvance (Header)
+         - About
+         - Contact Us
+         - Privacy Policy
+         - Terms of Service
+      - Navigation (Footer)
+         - Past Papers (like resources page)
+         - Match with a Tutor
+         - About (links to one above)
+         - Community
+      - Legal Info (Footer)
+         - Community Guidelines
+         - Terms Of Services
+         - Privacy Policy
+
+   ✔ Update UI for all miscellaneous pages and add the relevant content @done(25-07-21 11:37)
+   ✔ Update the code for all miscellaneous pages on the website @done(25-07-21 11:37)
+   ✔ Add links to all miscellaneous pages and side bars @done(25-07-21 11:37)
+
+Other TODO:
+   ✔ Update Community Notes pages for all subjects and update logic for DB @done(25-07-02 17:38)
+   ✔ Add user authentication for eduvance and collection of users logged email list (for marketing purposes) @done(25-06-29 06:45)
+   ✔ Plan site pages and plans for : @done(25-06-27 15:44)
+   ✔ Becoming a community contributor : Request to upload resources -> Linked to staff console for approval @done(25-06-26 22:15)
+   ✔ Update Contributor Page form link to DB table for approval of resources @done(25-06-27 15:44)
+   - Become a tutor/Match with a tutor : People could sign up to teach/study with tutors
+   ✔ Collect testimonials from community members for the website @done(25-07-12 16:17)
+
+   ✔ Design a new modular small footer for other website pages (Resources, Notes and Past Papers) @done(25-07-16 17:56)
+   ✔ Make a UI component for the modular footer for website pages @done(25-07-16 17:56)
+   ✔ Add modular footer to other website pages (Resources, Notes and Past Papers) @done(25-07-16 17:56)
+
+Community Feedback :
+   ✔ Update member counts on all pages to 18k @done(25-07-04 16:34)
+   ✔ Footer image spacing with the main div @done(25-07-21 11:37)
+   ✔ Adding placeholder for the community section (Biomeac, Maryam, Map) @done(25-07-13 04:22)
+   ✔ Staff Page name changed to Staff Access @done(25-07-04 16:34)
+   ✔ Footer page links to be updated @done(25-07-04 16:34)
+   ✔ Update all subject pages to have the right UI and responsive design @done(25-07-04 16:34)
+   ✔ Update links for the top bar in the website @done(25-07-13 04:22)
+   ✔ Chemistry Page Typo @done(25-07-07 14:59)
+   ✔ Update discord invite links @done(25-07-21 11:37)
+   ✔ Pointer Icon/Cursor on Buttons (Stig) @done(25-07-05 16:42)
+
+   ✔ Add modular UI design for main resources page to accomodate more subjects @done(25-07-21 11:37)
+   ✔ Choose your exam board should only have IGCSE and IAL @done(25-07-16 14:49)
+   ✔ Add a simple page for exam boards with links to other pages @done(25-07-16 14:56)
+   ✔ Choose your exam board should be changed to -> Choose your exam qualification @done(25-07-16 14:50)
+   ✔ Add a like/dislike system for the eduvance resources and community notes @done(25-07-17 12:26)
+
+   ✔ Update the supabase client scripts for bug fixes (side bar subjects + past paper fetch) @done(25-07-24 12:34)
+   ✔ Update study tools general pages for subject navigation @done(25-07-25 15:47)
+   ✔ Update dscord button transition animations @done(25-07-24 12:02)
+   ☐ Change in landing page headline (Advancing in Education with Eduvance)
+
+   ✔ Update code for eduvance notes fetch and fix error @done(25-07-25 15:47)
+   ✔ Revert back to old resources page navigation @done(25-07-25 14:42)
+   ✔ Update design for IAL and IGCSE subject pages @done(25-07-25 15:47)
+   ✔ Update links to use kebab case and ensure working subject links @done(25-07-25 14:46)
+   ✔ Add footer to all subject pages @done(25-07-25 14:42)
+
+   ☐ Update past paper page loading for top mini loading state animation
+   ✔ Reorder community contributor form to move subject up @done(25-07-27 13:33)
+   ✔ Update community contributor page to collect user email and information @done(25-07-27 13:28)
+   ✔ Update watermark with new images and positioning @done(25-07-27 13:10)
+   ✔ Update resources and past paper page fetch logic @done(25-07-28 12:07)
+
+Systems Todo:
+   ✔ Update Admin Console UI for extra information (revert) @done(25-07-09 12:05)
+   ✔ Update Subject Addition form for extra unit and other information on Admin Console @done(25-07-09 12:05)
+   ✔ Updated BIO IAL Resource Page for new unit field integration @done(25-07-09 12:05)
+   ✔ Updated Staff/Admin Console for new submit resource button @done(25-07-09 12:06)
+   ✔ Updated Community Contributor Page for new unit field dropdown @done(25-07-09 12:06)
+   ✔ Updated Staff Console for using community notes table from DB @done(25-07-09 12:06)
+   ✔ Update new subject files addition system for modular and robust workflow @done(25-07-13 04:22)
+
+   ✔ Update Staff console for more detailed overview of resources instances @done(25-07-16 06:03)
+   ✔ Add backend watermark function for watermarking and downloading approved resources @done(25-07-16 06:03)
+   ✔ Update backend watermark function for watermarking folders @done(25-07-16 14:46)
+   ✔ Update staff console resource cards with a watermark/approve button for backend watermark function @done(25-07-16 06:03)
+   ✔ Add resource editing and saving function to staff console resources instances @done(25-07-16 14:46)
+   ✔ Admin Console Resource Removal Section + Moderation Settings @done(25-07-18 14:39)
+
+   ✔ Auth System Update globally for session persistency @done(25-07-21 11:36)
+   ✔ Logged in session maintenance through-out different tabs @done(25-07-21 11:36)
+   ✔ Persistent log in message -> annoying feature @done(25-07-21 11:36)
+   ✔ Log Out button doesn't properly terminate the session @done(25-07-21 11:36)
+
+Final Stage Todo :
+   ✔ Past Paper page year filter bug fix for 2019 year @done(25-07-29 11:27)
+   ✔ Past Paper upload mechanism integration to both staff dashboards @done(25-07-30 06:15)
+   ✔ Website loading animation experiment + designs for logo animation @done(25-07-30 06:15)
+   ✔ Update all subject's past papers with the latest links @done(25-07-29 11:27)
+
+   ✔ Add Testimonial Scroll Section
+   ✔ Update Testimonial Scroll Section for Blur Effect
+   ✔ Add community testimonials with correct names and PFPs
+   ✔ Update testimonial card to showcase member role in community
+   ✔ Update testimonial card with variable length
+
+   ✔ Add Word from Founders Section base UI @done(25-08-30 13:23)
+   ✔ Add content to Founders section @done(25-08-30 13:23)
+   ✔ Update Founder Titles and Add mock text to the div @done(25-08-30 13:23)
+   ✔ Add Ad images to the section @done(25-08-30 13:23)
+   ✔ Make the Founders section responsive @done(25-09-01 16:40)
+
+   ✔ Change all the eduvance notes database tables to have the correct fields and structure @done(25-09-01 18:37)
+   ✔ Add blur overlay to disabled community notes pages and ensure no accessibility issues @done(25-09-01 18:37)
+
+Later Todo :
+   ✔ Update the testimonials @done(25-09-01 18:37)
+   ✔ Update side bar links @done(25-08-11 22:08)
+   ✔ Update resources pages button title @done(25-08-15 14:16)
+   ✔ Update footer link's colour transition for smoother UI @done(25-08-15 14:19)
+   ☐ Hide the side scroll bar
+
+   ✔ Update vercel analytics setting @done(25-09-02 09:50)
+   ✔ Test and Ensure working analytics data collection with vercel @done(25-09-02 09:50)
