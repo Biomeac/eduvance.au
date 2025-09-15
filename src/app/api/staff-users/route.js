@@ -29,7 +29,7 @@ export async function POST(request) {
     }
 
     // 1. Create the user in Supabase Auth using the admin client.
-    const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
+    const { data: authData, error: authError } = await getSupabaseAdmin().auth.admin.createUser({
       email,
       password,
       email_confirm: true // Automatically confirms the user's email
@@ -49,7 +49,7 @@ export async function POST(request) {
     const password_hash = await bcrypt.hash(password, 10); // 10 is the number of salt rounds
 
     // 3. Insert the staff user details into your 'staff_users' table.
-    const { data, error } = await supabaseAdmin.from('staff_users').insert({
+    const { data, error } = await getSupabaseAdmin().from('staff_users').insert({
       id: userId, // Link to the Supabase Auth user's UUID
       username,
       email,
@@ -61,7 +61,7 @@ export async function POST(request) {
       console.error('Failed to insert into staff_users table:', error.message);
       // IMPORTANT: If the insertion into 'staff_users' fails, delete the Auth user
       // to prevent orphaned authentication records.
-      await supabaseAdmin.auth.admin.deleteUser(userId);
+      await getSupabaseAdmin().auth.admin.deleteUser(userId);
       return new Response(JSON.stringify({ message: `Failed to create staff user record: ${error.message}` }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' },

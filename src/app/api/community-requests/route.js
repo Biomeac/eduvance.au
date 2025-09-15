@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase-server';
+import { getSupabaseAdmin } from '@/lib/supabase-server';
 
 // Helper function to verify staff authentication
 async function verifyStaffAuth(request) {
@@ -11,7 +11,7 @@ async function verifyStaffAuth(request) {
   const token = authHeader.substring(7);
   
   try {
-    const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
+    const { data: { user }, error } = await getSupabaseAdmin().auth.getUser(token);
     if (error || !user) return null;
 
     // Verify user is staff

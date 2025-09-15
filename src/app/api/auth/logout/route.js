@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase-server';
+import { getSupabaseAdmin } from '@/lib/supabase-server';
 
 export async function POST(request) {
   try {
@@ -13,7 +13,7 @@ export async function POST(request) {
     }
 
     // Sign out the user
-    const { error } = await supabaseAdmin.auth.admin.signOut(accessToken);
+    const { error } = await getSupabaseAdmin().auth.admin.signOut(accessToken);
 
     if (error) {
       return NextResponse.json(

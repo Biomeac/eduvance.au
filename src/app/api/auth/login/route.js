@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase-server';
+import { getSupabaseAdmin } from '@/lib/supabase-server';
 
 export async function POST(request) {
   try {
@@ -13,7 +13,8 @@ export async function POST(request) {
     }
 
     // Authenticate with Supabase
-    const { data, error } = await supabaseAdmin.auth.signInWithPassword({
+    const supabaseAdmin = getSupabaseAdmin();
+    const { data, error } = await getSupabaseAdmin().auth.signInWithPassword({
       email,
       password,
     });
